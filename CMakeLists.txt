@@ -15,7 +15,7 @@ set(PDFLATEX_COMPILER lualatex)
 set(SECTIONS "01-introduction")
 
 set(SECTION_01-introduction_NAME "Introduction")
-set(FRAMES_01-introduction "01-history")
+set(FRAMES_01-introduction "01-history" "02-motivation")
 
 set(INPUTS defs.tex)
 
