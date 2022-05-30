@@ -36,4 +36,4 @@ foreach(SECTION IN LISTS SECTIONS)
 endforeach()
 
 # Targets
-add_latex_document(slides.tex INPUTS ${INPUTS})
+add_latex_document(slides.tex INPUTS ${INPUTS} BIBFILES slides.bib USE_BIBLATEX)

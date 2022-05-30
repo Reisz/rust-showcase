@@ -1,2 +1,5 @@
 verbatimEnvironments:
   luacode*: 1
+commandCodeBlocks:
+  stringsAllowedBetweenArguments:
+    - "in"

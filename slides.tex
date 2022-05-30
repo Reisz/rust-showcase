@@ -5,10 +5,13 @@
 \usepackage{booktabs}
 \usepackage{luacode}
 \usepackage{microtype}
-\usepackage{tikz}
 \usepackage{minted}
 
-\usetikzlibrary{positioning}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+
+\usepackage[backend=biber, sorting=none]{biblatex}
+\addbibresource{slides.bib}
 
 \title{Rust Showcase}
 \author{Daniel Pfaff}
@@ -18,5 +21,10 @@
 
 \begin{document}%
 \maketitle%
+
 \input{toc}%
+
+\begin{frame}[allowframebreaks]{References}%
+	\printbibliography[heading=none]%
+\end{frame}%
 \end{document}
