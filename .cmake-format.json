@@ -6,7 +6,8 @@
                 "kwargs": {
                     "INPUTS": "1+",
                     "BIBFILES": "1+",
-                    "IMAGE_DIRS": "1+"
+                    "IMAGE_DIRS": "1+",
+                    "DEPENDS": "1+"
                 },
                 "flags": [
                     "USE_BIBLATEX"

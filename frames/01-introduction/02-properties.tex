@@ -1,5 +1,5 @@
 \begin{frame}{Properties}
-	\def\axis{
+	\newcommand{\relativeAxis}{
 		\begin{chktexIgnore}
 			\draw (0, 0) -- (10, 0);
 			\draw[semithick] (0, -4pt) -- (0, 4pt) (10, -4pt) -- (10, 4pt);
@@ -13,7 +13,7 @@
 	\textbf{Paradigm}\\
 	{\footnotesize Imperative\hfill{}Functional}
 	\begin{tikzpicture}
-		\axis
+		\relativeAxis
 		\node at (1, 0) {\includegraphics[height=\imageSize]{c}};
 		\node at (4, 0) {\includegraphics[height=\imageSize]{cpp}};
 		\node at (7, 0) {\includegraphics[height=\imageSize]{rust}};
@@ -25,7 +25,7 @@
 	\textbf{Error Detection}\\
 	{\footnotesize Run-time\hfill{}Compile-time}
 	\begin{tikzpicture}
-		\axis
+		\relativeAxis
 		\node at (0.5, 0) {\includegraphics[height=\imageSize]{python}};
 		\node at (3, 0) {\includegraphics[height=\imageSize]{c}};
 		\node at (5, 0) {\includegraphics[height=\imageSize]{cpp}};

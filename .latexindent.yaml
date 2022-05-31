@@ -3,3 +3,4 @@ verbatimEnvironments:
 commandCodeBlocks:
   stringsAllowedBetweenArguments:
     - "in"
+    - "table"

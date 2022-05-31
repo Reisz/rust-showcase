@@ -1,0 +1,10 @@
+\begin{frame}{Stack Overflow Surveys}%
+	\centering%
+	\begin{tikzpicture} % TODO make nice
+		\begin{axis}
+			\addplot table[y = loved] {data/rust_stats.csv};
+			\addplot table[y = wanted] {data/rust_stats.csv};
+			\addplot table[y = usage] {data/rust_stats.csv};
+		\end{axis}
+	\end{tikzpicture}%
+\end{frame}%
