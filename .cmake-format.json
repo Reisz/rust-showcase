@@ -1,0 +1,17 @@
+{
+    "parse": {
+        "additional_commands": {
+            "add_latex_document": {
+                "pargs": 1,
+                "kwargs": {
+                    "INPUTS": "1+",
+                    "BIBFILES": "1+",
+                    "IMAGE_DIRS": "1+"
+                },
+                "flags": [
+                    "USE_BIBLATEX"
+                ]
+            }
+        }
+    }
+}

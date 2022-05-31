@@ -5,5 +5,5 @@ WipeArg
 
 VerbEnvir
 {
-    luacode
+    luacode, chktexIgnore
 }
