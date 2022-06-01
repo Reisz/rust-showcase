@@ -4,3 +4,5 @@ commandCodeBlocks:
   stringsAllowedBetweenArguments:
     - "in"
     - "table"
+noAdditionalIndentGlobal:
+  keyEqualsValuesBracesBrackets: 1

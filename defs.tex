@@ -22,3 +22,18 @@
 \tikzset{
 	line cap = round,
 }
+
+\pgfplotsset{
+	base plot/.style = {
+		major grid style = {
+			dashed, thick,
+		},
+		axis x line = bottom,
+		ymajorgrids = true,
+		axis y line = left,
+	},
+	full page/.style = {
+		width = 0.99\textwidth,
+		height = 0.9\textheight,
+	},
+}

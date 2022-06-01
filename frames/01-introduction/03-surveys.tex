@@ -1,10 +1,20 @@
 \begin{frame}{Stack Overflow Surveys}%
 	\centering%
-	\begin{tikzpicture} % TODO make nice
-		\begin{axis}
+	\begin{tikzpicture}
+		\begin{axis}[
+				base plot, full page,
+				xmin = 2014.5, xmax = 2021.5,
+				xtick = data,
+				ymin = 0, ymax = 105,
+				yticklabel = {\pgfmathprintnumber{\tick}\,\%},
+				/pgf/number format/set thousands separator = {},
+				legend pos = south west,
+			]
 			\addplot table[y = loved] {data/rust_stats.csv};
 			\addplot table[y = wanted] {data/rust_stats.csv};
 			\addplot table[y = usage] {data/rust_stats.csv};
+
+			\legend{Loved, Wanted, Used}
 		\end{axis}
 	\end{tikzpicture}%
 \end{frame}%
