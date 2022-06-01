@@ -37,3 +37,14 @@
 		height = 0.9\textheight,
 	},
 }
+
+\newcommand{\fancyBox}[1]{%
+	\tikz{
+		\node[
+			draw = mDarkTeal, semithick,
+			font = {\bfseries},
+			rounded corners = 2pt,
+			inner sep = 1ex
+		] {#1};
+	}%
+}%
