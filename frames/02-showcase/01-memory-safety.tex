@@ -1,0 +1,70 @@
+\subsection{Memory Safety}%
+
+\newcommand{\twoPart}[4]{%
+	{\Large\color{gray} #1}#2%
+	\pause\vspace{1em}%
+	{\Large\color{gray} #3}#4%
+}%
+
+\newcommand{\compare}[2]{\twoPart{C++}{#1}{Rust}{#2}}%
+
+\defverbatim[colored]\copyExampleCpp{%
+	\begin{minted}{cpp}
+        std::vector<int> x{1, 2};
+        auto y = x; // Copy
+    \end{minted}
+}%
+\defverbatim[colored]\copyExampleRust{%
+	\begin{minted}{rust}
+        let x = vec![1, 2];
+        let y = x; // Move
+    \end{minted}
+}%
+\begin{frame}{Move by Default}%
+	\compare{\copyExampleCpp}{\copyExampleRust}%
+\end{frame}%
+
+\defverbatim[colored]\moveExampleCpp{%
+	\begin{minted}{cpp}
+        std::vector<int> x{1, 2};
+        auto y = std::move(x);
+        std::cout << x[0] << std::endl; // ?
+    \end{minted}
+}%
+\defverbatim[colored]\moveExampleRust{%
+	\begin{minted}{rust}
+        let x = vec![1, 2];
+        let y = x;
+        println!("{}", x[0]); // compiler error
+    \end{minted}
+}%
+\begin{frame}{Move Invalidates Origin}%
+	\begin{tikzpicture}[overlay]
+		\begin{scope}[visible on=<3>]
+			\node (cpp) at (9, -1) {User-defined (error-prone)};
+			\draw[Latex-] (5.2, -1.35) .. controls +(6mm, 0) and +(-6mm, 0) .. (cpp.west);
+			\node (rust) at (6, -4.6) {memmove};
+			\draw[Latex-] (2.4, -4.9) .. controls +(8mm, 0) and +(-8mm, 0) .. (rust.west);
+		\end{scope}
+	\end{tikzpicture}%
+	\compare{\moveExampleCpp}{\moveExampleRust}%
+\end{frame}%
+
+\defverbatim[colored]\cloneExample{%
+	\begin{minted}{rust}
+        let x = vec![1, 2];
+        let y = x.clone();
+        println!("{}", x[0]);
+    \end{minted}
+}%
+\defverbatim[colored]\copyExample{%
+	\begin{minted}{rust}
+        let x = 1;
+        let y = x; // Copy
+        println!("{x}");
+    \end{minted}
+}%
+\begin{frame}{Clone and Copy}%
+	\twoPart{Clone\footnotesize\hspace{5mm}Almost all types}{\cloneExample}%
+	{Copy\footnotesize\hspace{5mm}Basic types}{\copyExample}%
+\end{frame}%

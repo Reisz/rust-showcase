@@ -13,11 +13,14 @@ latex_get_output_path(OUTPUT_DIR)
 set(PDFLATEX_COMPILER lualatex)
 
 # Frames
-set(SECTIONS "01-introduction")
+set(SECTIONS "01-introduction" "02-showcase")
 
 set(SECTION_01-introduction_NAME "Introduction")
 set(FRAMES_01-introduction "01-definition" "02-history" "03-properties"
                            "04-surveys" "05-motivation")
+
+set(SECTION_02-showcase_NAME "Showcase")
+set(FRAMES_02-showcase "01-memory-safety")
 
 # Build table of contents and list of inputs
 set(INPUTS defs.tex)
