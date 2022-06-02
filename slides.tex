@@ -28,7 +28,10 @@
 
 \input{toc}%
 
-\begin{frame}[allowframebreaks]{References}%
+\appendix%
+\setbeamertemplate{frametitle continuation}{}%
+\section{References}%
+\begin{frame}[allowframebreaks, noframenumbering]{References}%
 	\printbibliography[heading=none]%
 \end{frame}%
 \end{document}
