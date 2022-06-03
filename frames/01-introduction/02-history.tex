@@ -1,50 +1,25 @@
+\newcounter{TimelineMarkers}%
+\newcommand{\timelineSide}{\ifodd\value{TimelineMarkers}{left}\else{right}\fi}%
+\newcommand{\timelineEntry}[2]{%
+	\node[\timelineSide=2pt of #1] {\bfseries #2};%
+	\stepcounter{TimelineMarkers}%
+	\node[\timelineSide=2pt of #1, text = gray] {\footnotesize#1};%
+}%
+
 \begin{frame}{Project History}%
 	\centering%
-	\begin{tikzpicture}
-		\def\lineDistance{3.5}
-		\def\labelOffset{0.6}
+	\begin{tikzpicture}[y = 4mm]
+		\draw[-Latex] (0, -0.25) -- (0, -18.25);
 
-		\def\dotRadius{1.2pt}
-		\def\lineOffset{8pt}
-
-		\begin{scope}[semithick]
-			\draw (-1, 0) -- (8, 0);
-			\draw[dotted] (8, 0) -- (8.5, 0);
-
-			\draw[dotted] (-0.5, -\lineDistance) -- (0, -\lineDistance);
-			\draw[-Latex] (0, -\lineDistance) -- (8, -\lineDistance);
-		\end{scope}
-
-		\foreach \year [count = \x from 0] in {2006, ..., 2014}{
-			\node[circle, inner sep = \dotRadius, fill] (\year) at (\x, 0) {};
-		}
-		\foreach \year [count = \x from 0] in {2015, ..., 2022}{
-			\node[circle, inner sep = \dotRadius, fill] (\year) at (\x, -\lineDistance) {};
+		\foreach \year [count = \y] in {2006, ..., 2022}{
+			\node[circle, inner sep = 1pt, fill] (\year) at (0, -\y) {};
 		}
 
-		\begin{scope}[
-				font = {\bfseries},
-				draw = gray,
-				every label/.style = {text = gray, font = {\footnotesize}},
-			]
-
-			\node[below = \labelOffset of 2006] (start) {Project Start~\supercite{Faq}};
-			\draw (2006) node [label = 2006] {} +(0, -\lineOffset) -- (start);
-
-			\node[above = \labelOffset of 2009] (funding) {Mozilla Funding~\supercite{Faq}};
-			\draw (2009) node [label = below:2009] {} +(0, \lineOffset) -- (funding);
-
-			\node[below = \labelOffset of 2012] (alpha) {First Pre-Alpha~\supercite{RustAlpha}};
-			\draw (2012) node [label = 2012] {} +(0, -\lineOffset) -- (alpha);
-
-			\node[below = \labelOffset of 2015] (Rust2015) {Rust 1.0~\supercite{Rust1.0}};
-			\draw (2015) node [label = 2015] {} +(0, -\lineOffset) -- (Rust2015);
-
-			\node[above = \labelOffset of 2020] (layoff) {Mozilla Layoffs~\supercite{RustFuture}};
-			\draw (2020) node [label = below:2020] {} +(0, \lineOffset) -- (layoff);
-
-			\node[below = \labelOffset of 2021] (Rust2021) {Rust Foundation~\supercite{FoundationStart}};
-			\draw (2021) node [label = 2021] {} +(0, -\lineOffset) -- (Rust2021);
-		\end{scope}
+		\timelineEntry{2006}{Project Start~\supercite{Faq}}
+		\timelineEntry{2009}{Mozilla Funding~\supercite{Faq}}
+		\timelineEntry{2012}{First Pre-Alpha~\supercite{RustAlpha}}
+		\timelineEntry{2015}{Rust 1.0~\supercite{Rust1.0}}
+		\timelineEntry{2020}{Mozilla Layoffs~\supercite{RustFuture}}
+		\timelineEntry{2021}{Rust Foundation~\supercite{FoundationStart}}
 	\end{tikzpicture}%
 \end{frame}%
