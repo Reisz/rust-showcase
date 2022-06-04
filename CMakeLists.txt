@@ -16,8 +16,8 @@ set(PDFLATEX_COMPILER lualatex)
 set(SECTIONS "01-introduction" "02-showcase")
 
 set(SECTION_01-introduction_NAME "Introduction")
-set(FRAMES_01-introduction "01-definition" "02-history" "03-properties"
-                           "04-surveys" "05-motivation")
+set(FRAMES_01-introduction "01-definition" "02-history" "03-surveys"
+                           "04-motivation")
 
 set(SECTION_02-showcase_NAME "Showcase")
 set(FRAMES_02-showcase "01-memory-safety")
@@ -61,7 +61,6 @@ add_custom_command(
 add_latex_document(
   slides.tex
   INPUTS ${INPUTS}
-  IMAGE_DIRS images
   BIBFILES slides.bib
   USE_BIBLATEX
   DEPENDS ${TOC_FILE} ${DATA_OUT})
