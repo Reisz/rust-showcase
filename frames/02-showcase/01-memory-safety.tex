@@ -2,7 +2,7 @@
 
 \newcommand{\twoPart}[4]{%
 	{\Large\color{gray} #1}#2%
-	\pause\vspace{1em}%
+	\pause\vspace{0.8em}%
 	{\Large\color{gray} #3}#4%
 }%
 
@@ -43,8 +43,8 @@
 		\begin{scope}[visible on=<3>]
 			\node (cpp) at (9, -1) {User-defined (error-prone)};
 			\draw[Latex-] (5.2, -1.35) .. controls +(6mm, 0) and +(-6mm, 0) .. (cpp.west);
-			\node (rust) at (6, -4.6) {memmove};
-			\draw[Latex-] (2.4, -4.9) .. controls +(8mm, 0) and +(-8mm, 0) .. (rust.west);
+			\node (rust) at (6, -4.5) {memmove};
+			\draw[Latex-] (2.4, -4.8) .. controls +(8mm, 0) and +(-8mm, 0) .. (rust.west);
 		\end{scope}
 	\end{tikzpicture}%
 	\compare{\moveExampleCpp}{\moveExampleRust}%
@@ -67,4 +67,95 @@
 \begin{frame}{Clone and Copy}%
 	\twoPart{Clone\footnotesize\hspace{5mm}Almost all types}{\cloneExample}%
 	{Copy\footnotesize\hspace{5mm}Basic types}{\copyExample}%
+\end{frame}%
+
+\defverbatim[colored]\owningFn{%
+	\begin{minted}{rust}
+        fn vec_len(v: Vec<i32>) -> usize {
+            v.len()
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\useOwningFn{%
+	\begin{minted}{rust}
+        let v = vec![1, 2];
+        println!("{}", vec_len(v));
+        println!("{}", v[0]); // Error, moved
+    \end{minted}
+}%
+\defverbatim[colored]\borrowingFn{%
+	\begin{minted}{rust}
+        fn vec_len(v: &Vec<i32>) -> usize {
+            v.len()
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\useBorrowingFn{%
+	\begin{minted}{rust}
+        let v = vec![1, 2];
+        println!("{}", vec_len(&v));
+        println!("{}", v[0]); // Ok
+    \end{minted}
+}%
+\begin{frame}{Ownership and Borrowing}%
+	\nointerlineskip%
+	\begin{tikzpicture}[
+			overlay,
+			mLightBrown, opacity = 0.5,
+			radius = 0.9ex,
+			visible on = <3>,
+		]
+		\fill (3.34, -0.75) circle;
+		\fill (5.42, -3.73) circle;
+	\end{tikzpicture}%
+	\only<1-2>{\owningFn\pause\useOwningFn}%
+	\only<3>{\borrowingFn\useBorrowingFn}%
+\end{frame}%
+
+\defverbatim[colored]\cppDangle{%
+	\begin{minted}{cpp}
+        std::function<int()> get_getter() {
+            int i = 42;
+            return [&]() { return i; }; // UB
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\rustDangle{%
+	\begin{minted}{rust}
+        fn get_getter() -> impl Fn() -> i32 {
+            let i = 42;
+            || i // Compiler error
+        }
+    \end{minted}
+}%
+
+\defverbatim[colored]\cppWrap{%
+	\begin{minted}{cpp}
+        std::function<int()> get_getter(int &i) {
+            return [&]() { return i; };
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\rustWrap{%
+	\begin{minted}{rust}
+        fn get_getter<'a>(
+            i: &'a i32,
+        ) -> impl Fn() -> i32 + 'a {
+            || *i
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\rustWrapSimple{%
+	\begin{minted}{rust}
+        fn get_getter(
+            i: &i32,
+        ) -> impl Fn() -> i32 + '_ {
+            || *i
+        }
+    \end{minted}
+}%
+\begin{frame}{Lifetimes}%
+	\only<1-2>{\compare{\cppDangle}{\rustDangle}}% chktex 8
+	\addtocounter{beamerpauses}{2}%
+	\only<3->{\compare{\cppWrap}{\only<3-4>{\rustWrap}\only<5->{\rustWrapSimple}}}% chktex 8
 \end{frame}%
