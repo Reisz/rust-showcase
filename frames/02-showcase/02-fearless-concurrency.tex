@@ -1,0 +1,58 @@
+\subsection{Fearless Concurrency}%
+
+\defverbatim[colored]\immutableModification{%
+	\begin{minted}{rust}
+        fn add_value(v: &Vec<i32>) {
+            v.push(42); // Compiler error
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\mutableModification{%
+	\begin{minted}{rust}
+        fn add_value(v: &mut Vec<i32>) {
+            v.push(42);
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\useMutableModification{%
+	\begin{minted}{rust}
+        let mut v = vec![1, 2];
+        add_value(&mut v);
+    \end{minted}
+}%
+\begin{frame}{Explicit Mutability}%
+	\only<1>{\immutableModification}%
+	\only<2->{\mutableModification}%
+	\onslide<3->%
+	\useMutableModification%
+\end{frame}%
+
+\defverbatim[colored]\readingLoop{%
+	\begin{minted}{rust}
+        let mut v = vec![1, 2];
+        for e in &v {
+            println!("{e}, {}", v[0]);
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\writingLoop{%
+	\begin{minted}{rust}
+        for e in &v {
+            v.push(*e); // Compiler error
+        }
+    \end{minted}
+}%
+\defverbatim[colored]\extendFromWithin{%
+	% Blank lines to preserve vertical spacing
+	\begin{minted}{rust}
+        v.extend_from_within(..);
+
+
+    \end{minted}
+}%
+\begin{frame}{Mutability Control}%
+	\readingLoop%
+	\onslide<2->%
+	\only<-2>{\writingLoop}%
+	\only<3>{\extendFromWithin}%
+\end{frame}%

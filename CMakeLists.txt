@@ -20,7 +20,7 @@ set(FRAMES_01-introduction "01-definition" "02-history" "03-surveys"
                            "04-motivation")
 
 set(SECTION_02-showcase_NAME "Showcase")
-set(FRAMES_02-showcase "01-memory-safety")
+set(FRAMES_02-showcase "01-memory-safety" "02-fearless-concurrency")
 
 # Build table of contents and list of inputs
 set(INPUTS defs.tex)
