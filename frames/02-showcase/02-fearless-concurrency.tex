@@ -3,7 +3,7 @@
 \defverbatim[colored]\immutableModification{%
 	\begin{minted}{rust}
         fn add_value(v: &Vec<i32>) {
-            v.push(42); // Compiler error
+            v.push(42);
         }
     \end{minted}
 }%
@@ -23,8 +23,12 @@
 \begin{frame}{Explicit Mutability}%
 	\only<1>{\immutableModification}%
 	\only<2->{\mutableModification}%
-	\onslide<3->%
-	\useMutableModification%
+	\nointerlineskip%
+	\begin{overprint}%
+		\onslide<1>\compilerError{0596}{cannot borrow {`*v`} as mutable, as it is behind a {`\&`}%
+			reference}%
+		\onslide<3>\useMutableModification%
+	\end{overprint}%
 \end{frame}%
 
 \defverbatim[colored]\readingLoop{%
@@ -38,21 +42,21 @@
 \defverbatim[colored]\writingLoop{%
 	\begin{minted}{rust}
         for e in &v {
-            v.push(*e); // Compiler error
+            v.push(*e);
         }
     \end{minted}
+	\compilerError{0502}{cannot borrow {`v`} as mutable because it is also borrowed as immutable}%
 }%
 \defverbatim[colored]\extendFromWithin{%
-	% Blank lines to preserve vertical spacing
 	\begin{minted}{rust}
         v.extend_from_within(..);
-
-
     \end{minted}
 }%
 \begin{frame}{Mutability Control}%
 	\readingLoop%
-	\onslide<2->%
-	\only<-2>{\writingLoop}%
-	\only<3>{\extendFromWithin}%
+	\nointerlineskip%
+	\begin{overprint}%
+		\onslide<2>\writingLoop%
+		\onslide<3>\extendFromWithin%
+	\end{overprint}%
 \end{frame}%

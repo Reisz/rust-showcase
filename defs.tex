@@ -51,6 +51,10 @@
 	autogobble,
 }
 
+\newcommand{\compilerError}[2]{%
+	\footnotesize\ttfamily\bfseries\textcolor{red}{error[E#1]}: #2%
+}%
+
 \newcommand{\fancyBox}[1]{%
 	\tikz{
 		\node[

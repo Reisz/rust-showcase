@@ -35,8 +35,9 @@
 	\begin{minted}{rust}
         let x = vec![1, 2];
         let y = x;
-        println!("{}", x[0]); // compiler error
+        println!("{}", x[0]);
     \end{minted}
+	\compilerError{0382}{borrow of moved value: `x`}%
 }%
 \begin{frame}{Move Invalidates Origin}%
 	\begin{tikzpicture}[overlay]
@@ -80,7 +81,7 @@
 	\begin{minted}{rust}
         let v = vec![1, 2];
         println!("{}", vec_len(v));
-        println!("{}", v[0]); // Error, moved
+        println!("{}", v[0]);
     \end{minted}
 }%
 \defverbatim[colored]\borrowingFn{%
@@ -94,22 +95,13 @@
 	\begin{minted}{rust}
         let v = vec![1, 2];
         println!("{}", vec_len(&v));
-        println!("{}", v[0]); // Ok
+        println!("{}", v[0]);
     \end{minted}
 }%
 \begin{frame}{Ownership and Borrowing}%
-	\nointerlineskip%
-	\begin{tikzpicture}[
-			overlay,
-			mLightBrown, opacity = 0.5,
-			radius = 0.9ex,
-			visible on = <3>,
-		]
-		\fill (3.34, -0.75) circle;
-		\fill (5.42, -3.73) circle;
-	\end{tikzpicture}%
-	\only<1-2>{\owningFn\pause\useOwningFn}%
+	\only<-2>{\owningFn\pause\useOwningFn}%
 	\only<3>{\borrowingFn\useBorrowingFn}%
+	\onslide<2>{\compilerError{0382}{borrow of moved value: `v`}}%
 \end{frame}%
 
 \defverbatim[colored]\cppDangle{%
@@ -124,7 +116,7 @@
 	\begin{minted}{rust}
         fn get_getter() -> impl Fn() -> i32 {
             let i = 42;
-            || i // Compiler error
+            || i
         }
     \end{minted}
 }%
@@ -155,7 +147,17 @@
     \end{minted}
 }%
 \begin{frame}{Lifetimes}%
-	\only<1-2>{\compare{\cppDangle}{\rustDangle}}% chktex 8
+	\nointerlineskip%
+	\tikz[overlay]{
+		\node[
+			anchor = north west,
+			draw,
+			align = left, text width = 7cm,
+			visible on = <2>,
+		] at (3.5, -5.5) {\compilerError{0373}{closure may outlive the current function, but it%
+				borrows {`i`}, which is owned by the current function}};
+	}%
+	\only<-2>{\compare{\cppDangle}{\rustDangle}}%
 	\addtocounter{beamerpauses}{2}%
-	\only<3->{\compare{\cppWrap}{\only<3-4>{\rustWrap}\only<5->{\rustWrapSimple}}}% chktex 8
+	\only<3->{\compare{\cppWrap}{\only<3, 4>{\rustWrap}\only<5->{\rustWrapSimple}}}%
 \end{frame}%
