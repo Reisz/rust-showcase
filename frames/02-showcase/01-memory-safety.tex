@@ -1,9 +1,10 @@
 \subsection{Memory Safety}%
 
 \newcommand{\twoPart}[4]{%
-	{\Large\color{gray} #1}#2%
-	\pause\vspace{0.8em}%
-	{\Large\color{gray} #3}#4%
+	\def\headingSpace{-0.6em}%
+	{\Large\color{gray} #1}\vspace{\headingSpace}#2%
+	\pause%
+	{\Large\color{gray} #3}\vspace{\headingSpace}#4%
 }%
 
 \newcommand{\compare}[2]{\twoPart{C++}{#1}{Rust}{#2}}%
@@ -42,10 +43,14 @@
 \begin{frame}{Move Invalidates Origin}%
 	\begin{tikzpicture}[overlay]
 		\begin{scope}[visible on=<3>]
-			\node (cpp) at (9, -1) {User-defined (error-prone)};
-			\draw[Latex-] (5.2, -1.35) .. controls +(6mm, 0) and +(-6mm, 0) .. (cpp.west);
-			\node (rust) at (6, -4.5) {memmove};
-			\draw[Latex-] (2.4, -4.8) .. controls +(8mm, 0) and +(-8mm, 0) .. (rust.west);
+			\begin{scope}[shift={(5.2, -1.1)}]
+				\node (cpp) at (3.5, 0.5) {User-defined (error-prone)};
+				\draw[Latex-] (0, 0) .. controls +(6mm, 0) and +(-6mm, 0) .. (cpp.west);
+			\end{scope}
+			\begin{scope}[shift={(2.4, -4.1)}]
+				\node (rust) at (3.5, 0.4) {memmove};
+				\draw[Latex-] (0, 0) .. controls +(8mm, 0) and +(-8mm, 0) .. (rust.west);
+			\end{scope}
 		\end{scope}
 	\end{tikzpicture}%
 	\compare{\moveExampleCpp}{\moveExampleRust}%
@@ -152,10 +157,9 @@
 		\node[
 			anchor = north west,
 			draw,
-			align = left, text width = 7cm,
+			align = left, text width = 8cm,
 			visible on = <2>,
-		] at (3.5, -5.5) {\compilerError{0373}{closure may outlive the current function, but it%
-				borrows {`i`}, which is owned by the current function}};
+		] at (2.2, -5) {\compilerError{0373}{closure may outlive the current function, but it borrows {`i`}, which is owned by the current function}};
 	}%
 	\only<-2>{\compare{\cppDangle}{\rustDangle}}%
 	\addtocounter{beamerpauses}{2}%
