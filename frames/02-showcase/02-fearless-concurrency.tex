@@ -25,8 +25,7 @@
 	\only<2->{\mutableModification}%
 	\nointerlineskip%
 	\begin{overprint}%
-		\onslide<1>\compilerError{0596}{cannot borrow {`*v`} as mutable, as it is behind a {`\&`}%
-			reference}%
+		\onslide<1>\compilerError{0596}{cannot borrow {`*v`} as mutable, as it is behind a {`\&`} reference}%
 		\onslide<3>\useMutableModification%
 	\end{overprint}%
 \end{frame}%
@@ -60,3 +59,49 @@
 		\onslide<3>\extendFromWithin%
 	\end{overprint}%
 \end{frame}%
+
+\defverbatim[colored]\threadByRef{%
+	\begin{minted}{rust}
+        let mut v = vec![1, 2];
+        thread::spawn(|| v.push(3)).join().unwrap();
+        println!("{}", v[2]);
+    \end{minted}
+	\compilerError{0373}{closure may outlive the current function, but it borrows {`v`}, which is owned by the current function}\\[1em]
+	\compilerError{0502}{cannot borrow {`v`} as immutable because it is also borrowed as mutable}%
+}%
+\defverbatim[colored]\threadByRc{%
+	\begin{minted}{rust}
+        let v = Rc::new(RefCell::new(vec![1, 2]));
+        thread::spawn({
+            let v = v.clone();
+            move || v.borrow_mut().push(3)
+        })
+        .join()
+        .unwrap();
+        println!("{}", v.borrow()[2]);
+    \end{minted}
+}%
+\defverbatim[colored]\threadByArc{%
+	\begin{minted}{rust}
+        let v = Arc::new(Mutex::new(vec![1, 2]));
+        thread::spawn({
+            let v = v.clone();
+            move || v.lock().unwrap().push(3)
+        })
+        .join()
+        .unwrap();
+        println!("{}", v.lock().unwrap()[2]);
+    \end{minted}
+}%
+\begin{frame}{Threads}%
+	\only<1>{\threadByRef}%
+	\only<2>{\threadByRc}%
+	\only<3>{\threadByArc}%
+
+	\nointerlineskip\only<2->{%
+		\begin{overprint}%
+			\onslide<2>\compilerError{0277}{{`Rc<RefCell<Vec<i32>>>`} cannot be shared between threads safely}%
+			\onslide<3>%
+		\end{overprint}%
+	}%
+\end{frame}
