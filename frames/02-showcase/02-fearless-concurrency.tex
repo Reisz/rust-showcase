@@ -1,5 +1,56 @@
 \subsection{Fearless Concurrency}%
 
+\begin{frame}{Data Races}%
+	\centering%
+	\begin{tikzpicture}
+		\begin{scope}[outer sep = 5pt]
+			\node (t1) {Thread 1};
+			\node[right = 1.5cm of t1] (data) {Data};
+			\node[right = 1.5cm of data] (t2) {Thread 2};
+		\end{scope}
+
+		\begin{scope}[every node/.style = { draw }, inner sep = 5pt]
+			% Data
+			\node[below = 0.5 of data] (d1) {10};
+			\node[transparent, below = 0.5 of d1] (d2) {10}; % Placeholder
+
+			\node[visible on = <5->, below = 0.5 of d2] (d3) {12};
+			\draw[visible on = <-4>] (d3.north) -- (d3.south);
+
+			\node[visible on = <7->, below = 0.5 of d3] (d4) {15};
+			\draw[visible on = <-6>] (d4.north) -- (d4.south);
+
+			% Threads
+			\node[visible on = <2->] at (t1 |- d1) (buf1) {10};
+			\draw[visible on = <1>] (buf1.north) -- (buf1.south);
+
+			\node[visible on = <4->] at (t1 |- d3) (buf2) {12};
+			\draw[visible on = <-3>] (buf2.north) -- (buf2.south);
+
+			\node[visible on = <3->] at (t2 |- d2) (buf3) {10};
+			\draw[visible on = <-2>] (buf3.north) -- (buf3.south);
+
+			\node[visible on = <6->] at (t2 |- d4) (buf4) {15};
+			\draw[visible on = <-5>] (buf4.north) -- (buf4.south);
+		\end{scope}
+
+		\path (t1) +(0, -5.5cm) coordinate (end);
+		\draw[-Latex] (t1) -- (buf1) -- (buf2) -- (t1 |- end);
+		\draw[-Latex] (t2) -- (buf3) -- (buf4) -- (t2 |- end);
+		\draw[-Latex] (data) -- (d1) -- (d3) -- (d4) -- (d4 |- end);
+
+		\draw[visible on = <2->, -Latex] (d1) -- (buf1);
+		\draw[visible on = <5->, -Latex] (buf2) -- (d3);
+		\draw[visible on = <3->, -Latex] (d1) -- ($(d1)!0.5!(d1 -| buf3)$) |- (buf3);
+		\draw[visible on = <7->, -Latex] (buf4) -- (d4);
+
+		\begin{scope}[outer sep = 3pt]
+			\draw[visible on = <4->, -Latex] (buf1) -- +(-1cm, 0) |- node[pos = 0.25, left] {+2} (buf2);
+			\draw[visible on = <6->, -Latex] (buf3) -- +(1cm, 0) |- node[pos = 0.25, right] {+5} (buf4);
+		\end{scope}
+	\end{tikzpicture}%
+\end{frame}%
+
 \defverbatim[colored]\immutableModification{%
 	\begin{minted}{rust}
         fn add_value(v: &Vec<i32>) {
