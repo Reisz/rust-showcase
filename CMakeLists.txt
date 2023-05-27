@@ -11,51 +11,23 @@ latex_get_output_path(OUTPUT_DIR)
 
 # Config
 set(PDFLATEX_COMPILER lualatex)
-
-# Frames
-set(SECTIONS "01-introduction" "02-showcase")
-
-set(SECTION_01-introduction_NAME "Introduction")
-set(FRAMES_01-introduction "01-definition" "02-history" "03-surveys"
-                           "04-motivation")
-
-set(SECTION_02-showcase_NAME "Showcase")
-set(FRAMES_02-showcase "01-memory-safety" "02-fearless-concurrency")
-
-# Build table of contents and list of inputs
 set(INPUTS defs.tex)
-set(TOC_FILE ${OUTPUT_DIR}/toc.tex)
+
+# Files
+set(TOC_FILE ${OUTPUT_DIR}/content.tex)
 file(WRITE ${TOC_FILE} "% Generated in ${CMAKE_CURRENT_LIST_FILE}\n")
 
+file(GLOB SECTIONS CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_LIST_DIR} [0-9][0-9]-*)
 foreach(SECTION IN LISTS SECTIONS)
-  # Write section title
-  file(APPEND ${TOC_FILE} "\\section{${SECTION_${SECTION}_NAME}}%\n")
+  string(SUBSTRING ${SECTION} 3 -1 TITLE)
+  file(APPEND ${TOC_FILE} "\\section{${TITLE}}%\n")
 
-  foreach(FRAME IN LISTS FRAMES_${SECTION})
-    # Add file to inputs
-    list(APPEND INPUTS frames/${SECTION}/${FRAME}.tex)
-    # Write input statement
-    file(APPEND ${TOC_FILE} "\\input{frames/${SECTION}/${FRAME}}%\n")
+  file(GLOB FILES CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${SECTION}/*)
+  foreach(FILE IN LISTS FILES)
+    list(APPEND INPUTS ${FILE})
+    file(APPEND ${TOC_FILE} "\\input{${FILE}}%\n")
   endforeach()
 endforeach()
-
-# Data Command
-file(
-  GLOB DATA
-  RELATIVE ${CMAKE_CURRENT_LIST_DIR}
-  ${CMAKE_CURRENT_LIST_DIR}/data/*)
-
-set(DATA_IN ${DATA})
-list(TRANSFORM DATA_IN PREPEND ${CMAKE_CURRENT_LIST_DIR}/)
-
-set(DATA_OUT ${DATA})
-list(TRANSFORM DATA_OUT PREPEND ${OUTPUT_DIR}/)
-
-add_custom_command(
-  OUTPUT ${DATA_OUT}
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/data
-          ${OUTPUT_DIR}/data
-  DEPENDS ${DATA_IN})
 
 # Main Target
 add_latex_document(
