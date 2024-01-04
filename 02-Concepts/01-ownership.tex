@@ -1,0 +1,87 @@
+\begin{multiframe}[fragile]{Ownership}%
+	\centering
+
+	\begin{subframe}
+		Responsibility for \alert{resources} is part of the \alert{type-system}\\[1em]%
+		\pause%
+
+		\begin{columns}%
+			\column{0.33\textwidth}\centering\textbf{Allocations}%
+			\column{0.33\textwidth}\centering\textbf{File Handles}%
+			\column{0.33\textwidth}\centering\textbf{TCP Connections}%
+		\end{columns}%
+		\vspace{3em}%
+		\pause%
+
+		Rust inserts \alert{cleanup code} for owners\\%
+		\pause%
+		\begin{minted}{rust}
+            {
+                let vec = vec![1, 2, 3]; @\onslide<.(2)->@// Allocation
+            @\onslide<.(1)->@} @\onslide<.(3)->@// Deallocation
+        \end{minted}
+		\addtocounter{beamerpauses}{2}
+	\end{subframe}
+
+	\begin{subframe}
+		References \alert{borrow} access from the owner\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let vec = vec![1, 2, 3];
+            {
+                let borrow = &vec;
+                println!("{borrow:?}");
+            } @\pause{}@// No deallocation
+        \end{minted}
+	\end{subframe}
+
+	\begin{subframe}
+		Passing arguments \alert{by-value} transfers ownership\\%
+		\pause%
+
+		\begin{minted}{rust}
+            fn owning(vec: Vec<i32>) {
+                println!("{vec:?}");
+            } @\pause{}@// Deallocation
+        \end{minted}
+		\vspace{2em}%
+		\pause%
+
+		Passing arguments \alert{by-reference} requires a borrow\\%
+		\pause%
+
+		\begin{minted}{rust}
+            fn borrowing(vec: &Vec<i32>) {
+                println!("{vec:?}");
+            } @\pause{}@// No deallocation
+        \end{minted}
+	\end{subframe}
+
+	\begin{subframe}
+		Rust enforces \alert{exactly one} owner per resorce\\[1em]%
+		\pause%
+
+		\begin{minted}{rust}
+            let a = vec![1, 2, 3];
+            let b = a;@\onslide<.(3)->@ // Move
+            @\onslide<.(1)->@println!("{a:?}{b:?}");
+        \end{minted}
+		\onslide<.(2)->\compilerError{0382}{borrow of moved value: `a`}\\[1em]%
+		\addtocounter{beamerpauses}{2}%
+	\end{subframe}
+
+	\begin{subframe}
+		Multiple \alert{borrows} are possible\\[1em]%
+		\pause%
+
+		\begin{minted}{rust}
+            let a = vec![1, 2, 3];
+            let b = &a; @\onslide<.(3)->@// Borrow
+            @\onslide<.(1)->@let c = &a; @\onslide<.(3)->@// Borrow
+            @\onslide<.(1)->@println!("{a:?}{b:?}{c:?}");
+        \end{minted}
+		\onslide<.(2)->{\footnotesize\ttfamily\bfseries[1, 2, 3][1, 2, 3][1, 2, 3]}\\%
+		\addtocounter{beamerpauses}{2}%
+	\end{subframe}
+\end{multiframe}
