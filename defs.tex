@@ -12,9 +12,10 @@
 \definecolor{tolBrightPurple}{HTML}{AA3377}
 \definecolor{tolBrightGrey}{HTML}{BBBBBB}
 
+\newcounter{frameIndex}%
 % \begin{noindent}
 \newenvironment{multiframe}[2][]{%
-    \newcounter{frameIndex}%
+    \setcounter{frameIndex}{0}%
     \newcommand{\stepIndex}{\stepcounter{frameIndex}}%
     \newcommand{\frameIndex}{\Roman{frameIndex}}%
     \newenvironment{subframe}{%
@@ -42,23 +43,23 @@
 	visible on/.style={alt={#1{}{transparent}}},
 	dim/.style={alt={#1{opacity = 0.3}{}}},
 	alt/.code args={<#1>#2#3}{%
-			\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-		},
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
 }
 
 \pgfplotsset{
 	base plot/.style = {
-			major grid style = {
-					dashed, thick,
-				},
-			axis x line = bottom,
-			ymajorgrids = true,
-			axis y line = left,
+		major grid style = {
+			dashed, thick,
 		},
+		axis x line = bottom,
+		ymajorgrids = true,
+		axis y line = left,
+	},
 	full page/.style = {
-			width = 0.9\textwidth,
-			height = 0.9\textheight,
-		},
+		width = 0.9\textwidth,
+		height = 0.9\textheight,
+	},
 }
 
 \setminted{
@@ -66,6 +67,13 @@
 	escapeinside=@@,
 	beameroverlays,
 }
+
+\newcommand<>\markError[1]{%
+	\alt#2{%
+		\setlength{\fboxsep}{0pt}%
+		\colorbox{red!50}{\strut#1}%
+	}{#1}%
+}%
 
 \newcommand{\compilerError}[2]{%
 	{\footnotesize\ttfamily\bfseries
