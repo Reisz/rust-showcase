@@ -65,8 +65,9 @@
 		\begin{minted}{rust}
             let a = vec![1, 2, 3];
             let b = a;@\onslide<.(3)->@ // Move
-            @\onslide<.(1)->@println!("{:?}{b:?}", @\markError<.(2)->{a}@);
+            @\onslide<.(1)->@println!("{:?}{b:?}", @\errorBegin{}@a@\errorEnd{}@);
         \end{minted}
+		\markError<.(2)->{}%
 		\onslide<.(2)->\compilerError{0382}{borrow of moved value: `a`}\\[1em]%
 		\addtocounter{beamerpauses}{2}%
 	\end{subframe}

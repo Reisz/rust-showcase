@@ -1,0 +1,91 @@
+\begin{multiframe}[fragile]{Mutability}
+	\centering%
+
+	\begin{subframe}
+		Variables are \alert{immutable} by default\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let a = 1;
+            @\errorBegin{}@a = 2@\errorEnd{}@;
+        \end{minted}
+		\pause%
+
+		\markError{}%
+		\compilerError{0384}{cannot assign twice to immutable~variable~`a`}\\%
+	\end{subframe}
+
+	\begin{subframe}
+		Mutation requires \alert{explicit} syntax\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let mut a = 1;
+            a = 2;
+            println!("Value: {a}");
+        \end{minted}
+		\pause%
+
+		{\footnotesize\ttfamily\bfseries Value: 2}\\%
+	\end{subframe}
+
+	\begin{subframe}
+		References are \alert{immutable} by default\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let a = 1;
+            let b = &a;
+            @\errorBegin{}@*b = 2@\errorEnd{}@;
+        \end{minted}
+		\pause%
+
+		\markError{}%
+		\compilerError{0594}{cannot assign to `*b`, which is behind a~`\&` reference}\\%
+	\end{subframe}
+
+	\begin{subframe}
+		Mutable references \alert{require} mutable variables\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let a = 1;
+            let b = @\errorBegin{}@&mut a@\errorEnd{}@;
+        \end{minted}
+		\pause%
+
+		\markError{}%
+		\compilerError{0596}{cannot borrow `a` as mutable, as it is not declared as mutable}\\%
+	\end{subframe}
+
+	\begin{subframe}
+		Working example\\%
+		\pause%
+
+		\begin{minted}{rust}
+            let mut a = 1;
+            let b = &mut a;
+            *b = 2;
+            println!("Value: {a}");
+        \end{minted}
+		\pause%
+
+		{\footnotesize\ttfamily\bfseries Value: 2}\\%
+	\end{subframe}
+
+	\begin{subframe}
+		Mutable references are \alert{exclusive}\\%
+		\pause%
+
+		\begin{minted}{rust}
+            for element in &vec { @\onslide<.(3)->@// Immutable borrow
+                @\onslide<.(1)->@if *element == 2 {
+                    @\errorBegin{}@vec@\errorEnd{}@.push(0);
+                }
+            }
+        \end{minted}
+		\markError<.(2)->{}%
+		\onslide<.(2)->\compilerError{0502}{cannot borrow `vec` as mutable because it is also borrowed as immutable}\\%
+		\addtocounter{beamerpauses}{2}%
+	\end{subframe}
+\end{multiframe}

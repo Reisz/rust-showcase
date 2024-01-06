@@ -68,11 +68,21 @@
 	beameroverlays,
 }
 
-\newcommand<>\markError[1]{%
-	\alt#2{%
-		\setlength{\fboxsep}{0pt}%
-		\colorbox{red!50}{\strut#1}%
-	}{#1}%
+\newcounter{errorCounter}%
+\newcommand{\errorBegin}{%
+	\stepcounter{errorCounter}%
+	\tikzmark{errorBegin\theerrorCounter}%
+}%
+\newcommand{\errorEnd}{%
+	\tikzmark{errorEnd\theerrorCounter}%
+}%
+
+\newcommand<>\markError{%
+	\tikz[remember picture, overlay]{
+		\draw#1[red, very thick, dotted]
+		([yshift = -2pt] pic cs:errorBegin\theerrorCounter)
+		-- ([yshift = -2pt]pic cs:errorEnd\theerrorCounter);
+	}%
 }%
 
 \newcommand{\compilerError}[2]{%
